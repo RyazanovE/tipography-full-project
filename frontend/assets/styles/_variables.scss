@@ -1,0 +1,60 @@
+// WIDTHS
+$app_width: 1400px;
+$normal_gap: 20px;
+
+// BACKGROUNDS
+$primary_background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+$primary_dark_background: linear-gradient(135deg, #2a5cab 0%, #5051bf 100%);
+$primary_background_color: #3b82f6; // основной синий без градиента
+
+// BACKGROUND-COLORS
+$secondary_dark_background_color: #e2e8f0; // спокойный серо-голубой для наведения
+$footer_background_color: #1f2937; // глубокий тёмный (почти чёрный, но "живой")
+$light_gray_background_color: #f5f7fa; // нежно-серый фон
+$white_background_color: #ffffff;
+
+// BORDER-COLORS
+$primary_border_color: #d1d5db; // лёгкая серая рамка
+$hover_border_color: #a4a8ad; // лёгкая серая рамка
+
+// TRANSITIONS
+$background_color_transition: background-color 0.3s ease;
+$box-shadow-transition: box-shadow 0.3s ease;
+$all-transition: all 0.3s ease;
+
+// TEXT
+$white-text-color: #ffffff;
+$dark_gray_text_color: #374151; // тёмный, но не угольно-чёрный
+$light_gray_text_color: #6b7280; // мягкий светло-серый для вторичных элементов
+
+// BORDER-RADIUS
+$border_radius_normal: 12px;
+$border_radius_small: 8px;
+$border_radius_large: 20px;
+
+// FONT-SIZE
+$font_size_large: 16px;
+$font_size_normal: 14px;
+$font_size_small: 12px;
+$font-size_larger: 32px;
+
+// BOX-SHADOWS
+$box_shadow_normal: 0 1px 3px rgba(0, 0, 0, 0.1);
+$box_shadow_header: 0 1px 2px rgba(0, 0, 0, 0.15);
+$box_shadow_flat: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+// BUTTONS
+$button-font-size: 16px;
+$button-padding-y: 10px;
+$button-padding-x: 20px;
+$button-border-radius: 12px;
+$button-font-weight: 600;
+
+$primary-gradient: linear-gradient(135deg, #007aff 0%, #24c1c1 100%);
+$primary-hover-gradient: linear-gradient(135deg, #0569d3 0%, #21b1b1 100%);
+
+$secondary-bg: #f5f7fa;
+$secondary-hover-bg: #e2e8f0;
+
+$white-color: #ffffff;
+$text-color-secondary: #333333;

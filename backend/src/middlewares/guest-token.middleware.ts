@@ -26,7 +26,7 @@ export class GuestTokenMiddleware implements NestMiddleware {
 
       res.cookie('guest_token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        // secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict',
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
@@ -39,7 +39,7 @@ export class GuestTokenMiddleware implements NestMiddleware {
         const token = jwt.sign({ guestId }, jwtSecret, { expiresIn: '7d' });
         res.cookie('guest_token', token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
+          // secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict',
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });

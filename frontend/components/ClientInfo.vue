@@ -1,15 +1,15 @@
 <script lang="ts" setup>
 import { useLoginModal } from '~/stores/login-modal'
-import type { AuthMethod, ClientInfo } from '~/types/orders';
+import type { AuthMethod, ClientInfo } from '~/types/orders'
 
 const auth = useAuth()
 const isLoginModalShownState = useLoginModal()
 
 defineProps<{
-  confirmationStep: number
   errors: string[]
 }>()
 
+const step = defineModel<number>('step', { required: true })
 const selectedAuthMethod = defineModel<AuthMethod>('selectedAuthMethod', { required: true })
 const clientInfo = defineModel<ClientInfo>('clientInfo', { required: true })
 
@@ -21,17 +21,9 @@ const login = () => {
 
 <template>
   <UiCard class="order-confirmation__card">
-    <template #title>Данные получателя</template>
-    <template v-if="!auth.user.value" #subtitle>Войдите, чтобы иметь возможность:</template>
+    <template #title>1. Данные получателя</template>
     <div v-if="!auth.user.value" class="order-confirmation__content">
-      <ul class="order-confirmation__list">
-        <li>Отслеживать статус заказа</li>
-        <li>Накапливать персональные бонусы</li>
-        <li>Сохранять информацию об оплате и адресе доставки</li>
-        <li>Иметь доступ к сохранённым макетам</li>
-        <li>Просматривать историю заказов</li>
-      </ul>
-      <div class="order-confirmation__delivery-choice">
+      <div  class="order-confirmation__delivery-choice">
         <ButtonOutline
           title="Войти в аккаунт"
           hover-icon="mdiLogin"
@@ -43,42 +35,21 @@ const login = () => {
           title="Продолжить как гость"
           hover-icon="mdiIncognitoCircle"
           icon="mdiIncognito"
-          @click="selectedAuthMethod = 2"
+          @click="step = 1"
         />
       </div>
+      <UiList
+        title="Войдите, чтобы иметь возможность:"
+        :listItems="[
+          `Отслеживать статус заказа`,
+          'Накапливать персональные бонусы',
+          'Сохранять информацию об оплате и адресе доставки',
+          'Иметь доступ к сохранённым макетам',
+          'Просматривать историю заказов'
+        ]"
+      />
     </div>
-    <template v-if="selectedAuthMethod === 2 || auth.user.value">
-      <div class="order-confirmation__guest">
-        <UiInput
-          v-model="clientInfo.fio"
-          :disabled="confirmationStep === 2"
-          required
-          label="ФИО"
-          placeholder="Иванов Иван Иванович"
-          id="fio"
-          :error="errors.includes('fio')"
-        />
-        <UiInput
-          v-model="clientInfo.phone"
-          :disabled="confirmationStep === 2"
-          required
-          label="Телефон"
-          placeholder="+7 (___) ___-__-__"
-          mask="phone"
-          id="room"
-          :error="errors.includes('phone')"
-        />
-        <UiInput
-          v-model="clientInfo.email"
-          :disabled="confirmationStep === 2"
-          required
-          label="Почта"
-          placeholder="example@mail.com"
-          id="email"
-          :error="errors.includes('email')"
-        />
-      </div>
-    </template>
+    
   </UiCard>
 </template>
 
@@ -92,6 +63,10 @@ const login = () => {
     display: flex;
     gap: $normal_gap;
     margin-bottom: $normal-gap;
+
+    & > * {
+      flex: 1;
+    }
   }
 
   &__button-container {
@@ -113,7 +88,6 @@ const login = () => {
   }
 
   &__card {
-    flex: 1;
   }
 
   &__guest {

@@ -98,7 +98,7 @@ const onFileChange = () => {
 
       <aside class="mockup-preview">
         <div class="mockup-image">
-          <NuxtPicture src="images/vizitki/vizitki_1.png" :imgAttrs="{ class: 'zoomable' }" />
+          <img src="/images/vizitki/vizitki_1.png" :imgAttrs="{ class: 'zoomable' }" />
         </div>
         <div class="mockup-info">
           <UiSubHeader>Изготовление визиток методом цифровой печати</UiSubHeader>
@@ -177,12 +177,12 @@ const onFileChange = () => {
 
     .mockup-info {
       h2 {
-        margin-bottom: $normal_gap / 2;
+        margin-bottom: calc(normal_gap / 2);
         line-height: 28px;
       }
       p span {
         display: block;
-        margin-bottom: $normal_gap / 2;
+        margin-bottom: calc($normal_gap / 2);
       }
     }
   }

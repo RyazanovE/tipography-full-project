@@ -1,44 +1,204 @@
 <template>
-  <template v-if="auth.isAuthorized.value">
-    <div ref="stepOneBlock" />
-    <h1 class="order-confirmation__title">Подтверждение заказа</h1>
-    <div class="order-confirmation__container">
-      <ClientInfo
-        v-model:selectedAuthMethod="selectedAuthMethod"
-        v-model:clientInfo="clientInfo"
-        :confirmationStep
-        :errors
-      />
-      <DeliveryInfo
-        v-model:selectedDeliveryMethod="selectedDeliveryMethod"
-        v-model:addressInfo="addressInfo"
-        v-model:tkInfo="tkInfo"
-        :confirmationStep
-        :errors
-      />
-    </div>
-
-    <div v-if="confirmationStep === 1" class="order-confirmation__button-container">
-      <ButtonSolid @click="validateAddressAndClient">Продолжить </ButtonSolid>
-    </div>
-
-    <div ref="stepTwoBlock" />
-    <UiCard v-show="confirmationStep === 2">
-      <template #title>Информация о заказе</template>
-      <OrderInfo
-        :cartItems="cart.cartItems.value"
-        :clientInfo
-        :addressInfo
-        :selectedDeliveryMethod
-        :tkInfo
-        @changeConfirmationStep="confirmationStep = $event"
-      />
-      <div class="order-confirmation__button-container">
-        <ButtonSolid variant="secondary" @click="editInfo">Редатировать данные</ButtonSolid>
-        <ButtonSolid @click="confirmOrder">Оформить заказ </ButtonSolid>
+  <UiHeader class="order-confirmation__title">Оформление заказа</UiHeader>
+  <StepProgressBar :steps :current-step="confirmationStep" @step-click="() => {}" />
+  <div style="display: flex; gap: 40px" v-if="cart.cartItems.value.length">
+    <div>
+      <div v-show="confirmationStep === 0" class="order-confirmation__container">
+        <ClientInfo
+          v-model:step="confirmationStep"
+          v-model:selectedAuthMethod="selectedAuthMethod"
+          v-model:clientInfo="clientInfo"
+          :errors
+        />
+        <DeliveryInfo
+          v-if="confirmationStep > 0"
+          v-model:selectedDeliveryMethod="selectedDeliveryMethod"
+          v-model:addressInfo="addressInfo"
+          v-model:tkInfo="tkInfo"
+          :confirmationStep
+          :errors
+        />
       </div>
-    </UiCard>
-  </template>
+
+      <UiCard v-show="confirmationStep === 1">
+        <UiSubHeader class="order-confirmation__title">2. Добавление контактных данных</UiSubHeader>
+        <div class="order-confirmation__guest">
+          <UiInput
+            v-model="clientInfo.fio"
+            :disabled="confirmationStep === 2"
+            required
+            label="ФИО"
+            placeholder="Иванов Иван Иванович"
+            id="fio"
+            :error="errors.includes('fio')"
+          />
+          <UiInput
+            v-model="clientInfo.email"
+            :disabled="confirmationStep === 2"
+            required
+            label="Почта"
+            placeholder="example@mail.com"
+            id="email"
+            :error="errors.includes('email')"
+          />
+          <UiInput
+            v-model="clientInfo.phone"
+            :disabled="confirmationStep === 2"
+            required
+            label="Телефон"
+            placeholder="+7 (___) ___-__-__"
+            mask="phone"
+            id="room"
+            :error="errors.includes('phone')"
+          />
+          <UiInput
+            v-model="clientInfo.phone"
+            :disabled="confirmationStep === 2"
+            label="Телефон, если не дозвонимся"
+            placeholder="+7 (___) ___-__-__"
+            mask="phone"
+            id="room"
+            :error="errors.includes('phone')"
+          />
+        </div>
+
+        <div style="margin-top: 20px; display: flex; justify-content: end">
+          <ButtonSolid
+            @click="validateClient"
+            :disabled="!clientInfo.fio || !clientInfo.email || !clientInfo.phone"
+          >
+            Продолжить
+          </ButtonSolid>
+        </div>
+      </UiCard>
+
+      <div ref="stepTwoBlock" />
+      <UiCard v-show="confirmationStep === 2">
+        <UiSubHeader class="order-confirmation__title">3.1 Выберите способ получения</UiSubHeader>
+        <div style="display: flex; gap: 20px">
+          <ButtonOutline
+            style="flex: 1"
+            title="Самовывоз"
+            hover-icon="mdiLogin"
+            :active="deliveryType === 'pickup'"
+            icon="mdiMapMarkerDown"
+            @click="deliveryType = 'pickup'"
+          />
+
+          <ButtonOutline
+            style="flex: 1"
+            title="Доставка"
+            :active="deliveryType === 'delivery'"
+            hover-icon="mdiMapMarkerDown"
+            icon="mdiTruckDeliveryOutline"
+            @click="deliveryType = 'delivery'"
+          />
+        </div>
+
+        <div v-show="deliveryType === 'pickup'">
+          <UiSubHeader style="margin-top: 20px; margin-bottom: 20px"
+            >Самовывоз из офиса</UiSubHeader
+          >
+          <div style="display: flex; justify-content: center; gap: 20px; margin-bottom: 20px">
+            <div style="display: flex; flex-direction: column">
+              <p>г. Москва, ул. Строителей, 3</p>
+              <p>Время работы: с 9:00 до 18:00</p>
+            </div>
+          </div>
+          <Map />
+        </div>
+
+        <div v-show="deliveryType === 'delivery'">
+          <h4 class="order-confirmation__title" style="margin-top: 20px">Введите адрес доставки</h4>
+          <div class="order-confirmation__guest">
+            <UiInput
+              v-model="addressInfo.city"
+              required
+              :error="errors.includes('city')"
+              label="Город"
+              placeholder="Название города"
+              id="city"
+            />
+            <UiInput
+              v-model="addressInfo.street"
+              required
+              :error="errors.includes('street')"
+              label="Улица"
+              placeholder="Название улицы"
+              id="street"
+            />
+            <UiInput
+              v-model="addressInfo.house"
+              required
+              :error="errors.includes('house')"
+              label="Дом"
+              placeholder="Номер дома"
+              id="house"
+            />
+            <UiInput
+              v-model="addressInfo.room"
+              required
+              :error="errors.includes('room')"
+              label="Квартира/офис"
+              placeholder="Номер квартиры"
+              id="room"
+            />
+            <UiInput
+              v-model="addressInfo.comment"
+              textarea
+              label="Комментарий"
+              placeholder="Комментарий к адресу"
+              id="comment"
+            />
+          </div>
+        </div>
+
+        <div
+          v-show="
+            deliveryType === 'pickup' ||
+            (deliveryType === 'delivery' &&
+              Object.keys(addressInfo).every((key) => key === 'comment' || addressInfo[key]))
+          "
+        >
+          <UiSubHeader style="margin-top: 40px" class="order-confirmation__title"
+            >3.2 Выберите способ оплаты</UiSubHeader
+          >
+          <div style="display: flex; gap: 20px">
+            <ButtonOutline
+              style="flex: 1"
+              :active="paymentType === 'cash'"
+              title="Наличными или картой при получении"
+              hover-icon="mdiLogin"
+              icon="mdiCash100"
+              @click="paymentType = 'cash'"
+            />
+            <ButtonOutline
+              style="flex: 1"
+              :active="paymentType === 'online'"
+              title="Банковской картой онлайн"
+              hover-icon="mdiIncognitoCircle"
+              icon="mdiCreditCard"
+              @click="paymentType = 'online'"
+            />
+            <ButtonOutline
+              style="flex: 1"
+              :active="paymentType === 'qr'"
+              title="Система быстрых платежей - QR Code"
+              hover-icon="mdiIncognitoCircle"
+              icon="mdiQrcode"
+              @click="paymentType = 'qr'"
+            />
+          </div>
+          <div style="margin-top: 20px; display: flex; justify-content: end">
+            <ButtonSolid :disabled="!paymentType" @click="confirmationStep = 3">
+              Продолжить
+            </ButtonSolid>
+          </div>
+        </div>
+      </UiCard>
+    </div>
+    <div>dsfsdf</div>
+  </div>
   <UiLoader v-else />
 </template>
 
@@ -55,12 +215,36 @@ import type {
   TkInfo
 } from '~/types/orders'
 
-const stepOneBlock = ref<HTMLHeadingElement | null>(null)
-const stepTwoBlock = ref<HTMLHeadingElement | null>(null)
+const deliveryType = ref<'delivery' | 'pickup' | null>('pickup')
+const paymentType = ref<'cash' | 'online' | 'qr' | null>(null)
 
 const breadcrumbs = useBreadcrumbs()
 const auth = useAuth()
 const cart = useCart()
+
+const selectedDeliveryMethod = ref<DeliveryMethod>(null)
+const selectedAuthMethod = ref<AuthMethod>(null)
+const confirmationStep = ref<ConfirmationStep>(2)
+const errors = ref<string[]>([])
+
+const steps = [
+  {
+    label: 'Войти в аккаунт?',
+    description: 'Войдите или продолжите оформление как гость'
+  },
+  {
+    label: 'Данные получателя',
+    description: 'Заполните основную информацию о себе'
+  },
+  {
+    label: 'Получение и оплата',
+    description: 'Выберите способ получения и оплаты'
+  },
+  {
+    label: 'Подтверждение',
+    description: 'Проверьте и подтвердите введенные данные'
+  }
+]
 
 breadcrumbs.value = [
   {
@@ -76,11 +260,6 @@ breadcrumbs.value = [
     to: '/podtverzhdenie-zakaza'
   }
 ]
-
-const selectedDeliveryMethod = ref<DeliveryMethod>(null)
-const selectedAuthMethod = ref<AuthMethod>(null)
-const confirmationStep = ref<ConfirmationStep>(1)
-const errors = ref<string[]>([])
 
 const clientInfo = ref<ClientInfo>({
   fio: '',
@@ -131,15 +310,15 @@ const editInfo = () => {
   confirmationStep.value = 1
 }
 
-const validateAddressAndClient = async () => {
+const validateClient = async () => {
   const validationDict = {
     fio: clientInfo.value.fio,
     phone: clientInfo.value.phone.length === 18,
-    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientInfo.value.email),
-    street: addressInfo.value.street || selectedDeliveryMethod.value !== 2,
-    house: addressInfo.value.house || selectedDeliveryMethod.value !== 2,
-    room: addressInfo.value.room || selectedDeliveryMethod.value !== 2,
-    address: tkInfo.value.address || selectedDeliveryMethod.value !== 3
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clientInfo.value.email)
+    // street: addressInfo.value.street || selectedDeliveryMethod.value !== 2,
+    // house: addressInfo.value.house || selectedDeliveryMethod.value !== 2,
+    // room: addressInfo.value.room || selectedDeliveryMethod.value !== 2,
+    // address: tkInfo.value.address || selectedDeliveryMethod.value !== 3
   }
 
   errors.value = []
@@ -246,7 +425,7 @@ const scrollToSection = (targetRef: HTMLDivElement | null) => {
 
 .order-confirmation {
   &__title {
-    margin-bottom: calc($normal_gap/2);
+    margin-bottom: calc($normal_gap);
   }
 
   &__delivery-choice {
@@ -269,6 +448,7 @@ const scrollToSection = (targetRef: HTMLDivElement | null) => {
 
   &__container {
     display: flex;
+    flex-direction: column;
     margin-bottom: $normal_gap;
     gap: $normal_gap;
   }

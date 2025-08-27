@@ -1,33 +1,50 @@
 <template>
-  <div class="input">
-    <label v-if="label" class="input__label" :for="id">
-      <span>
+  <div class="custom-input">
+    <div class="input-header">
+      <label v-if="label" :for="id" class="input-label">
         {{ label }}
-      </span>
-      <MdiIcon v-if="required" icon="mdiAsterisk" class="input__required-icon" />
-    </label>
-    <input
-      v-if="!textarea"
-      ref="inputRef"
-      class="input__control"
-      :class="{ input__control_error: error, input__control_disabled: disabled }"
-      :id="id"
-      :disabled="disabled"
-      :type="type ?? 'text'"
-      v-model="model"
-      :placeholder="placeholder"
-    />
-    <textarea
-      v-else
-      class="input__control input__control--textarea"
-      :id="id"
-      v-model="model"
-      :placeholder="placeholder"
-    />
+        <span v-if="required" class="required-mark">*</span>
+      </label>
+    </div>
+
+    <div class="input-wrapper">
+      <input
+        v-if="!textarea"
+        ref="inputRef"
+        class="input-control"
+        :class="{
+          'input-control--error': error,
+          'input-control--disabled': disabled,
+          'input-control--focused': isFocused
+        }"
+        :id="id"
+        :disabled="disabled"
+        :type="type ?? 'text'"
+        v-model="model"
+        :placeholder="placeholder"
+        @focus="isFocused = true"
+        @blur="isFocused = false"
+      />
+      <textarea
+        v-else
+        class="input-control input-control--textarea"
+        :class="{
+          'input-control--error': error,
+          'input-control--disabled': disabled,
+          'input-control--focused': isFocused
+        }"
+        :id="id"
+        v-model="model"
+        :placeholder="placeholder"
+        @focus="isFocused = true"
+        @blur="isFocused = false"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import IMask from 'imask'
 
 const props = defineProps<{
@@ -44,6 +61,7 @@ const props = defineProps<{
 
 const model = defineModel<string>()
 const inputRef = ref<HTMLInputElement | null>(null)
+const isFocused = ref(false)
 
 onMounted(() => {
   const el = inputRef.value
@@ -55,54 +73,90 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.input__control_disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  box-shadow: none !important;
+.custom-input {
+  position: relative;
+  width: 100%;
+}
+
+.input-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.input-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+  display: flex;
+  align-items: center;
+}
+
+.required-mark {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.input-control {
+  position: relative;
+  width: 100%;
+  padding: 12px 16px;
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  min-height: 48px;
+  font-size: 14px;
+  color: #374151;
 
   &:hover {
-    box-shadow: none;
+    border-color: #d1d5db;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+
+  &::placeholder {
+    color: #9ca3af;
   }
 }
 
-.input {
-  display: flex;
-  flex-direction: column;
+.input-control--focused {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
 
-  &__label {
-    display: flex;
-    font-size: $font-size_normal;
-    margin-bottom: calc($normal_gap / 4);
+.input-control--textarea {
+  resize: vertical;
+  min-height: 88px;
+}
+
+.input-control--error {
+  border-color: #ef4444;
+  
+  &:focus,
+  &:hover {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
   }
+}
 
-  &__required-icon {
-    height: 7px;
-    margin-top: 3px;
-
-    & > * {
-      fill: red;
-    }
-  }
-
-  &__control {
-    background-color: $light_gray_background_color;
-    border-radius: $border_radius_small;
-    padding: calc($normal_gap / 2) $normal_gap;
-    resize: none;
-    border: 1px solid $primary_border_color;
-    transition: $all-transition;
-
-    &:hover {
-      box-shadow: $box_shadow_normal;
-    }
-
-    &--textarea {
-      height: 88px;
-    }
-
-    &_error {
-      border-color: red;
-    }
+.input-control--disabled {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  
+  &:hover {
+    border-color: #e5e7eb;
+    box-shadow: none;
   }
 }
 </style>

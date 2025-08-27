@@ -134,7 +134,7 @@ export class UserService {
     token: string,
     name?: string,
   ) {
-    const resetLink = `${process.env.PASSWORD_RESET_LINK}?token=${token}`;
+    const resetLink = `${process.env.NODE_ENV === 'production' ? process.env.PASSWORD_RESET_LINK_PROD : process.env.PASSWORD_RESET_LINK}?token=${token}`;
     const expiresMinutes = 15;
 
     await this.emailService.sendEmail(
@@ -168,7 +168,7 @@ export class UserService {
     token: string,
     name?: string,
   ) {
-    const confirmLink = `${process.env.EMAIL_CONFIRM_LINK}?token=${token}`;
+    const confirmLink = `${process.env.NODE_ENV === 'production' ? process.env.EMAIL_CONFIRM_LINK_PROD : process.env.EMAIL_CONFIRM_LINK}?token=${token}`;
 
     const siteName = 'Временное название'
 

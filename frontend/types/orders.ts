@@ -75,7 +75,7 @@ export interface OrderPayload {
   }
 }
 
-export type ConfirmationStep = 1 | 2
+export type ConfirmationStep = 0 | 1 | 2 | 3
 
 export type AuthMethod = 1 | 2 | null
 

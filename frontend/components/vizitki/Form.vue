@@ -1,6 +1,5 @@
 <template>
   <form class="calculation-form" @submit.prevent>
-    <UiSubHeader class="calculation-form__title">Расчет стоимости</UiSubHeader>
     <UiSelect
       v-model="formValue.material"
       class="calculation-form__select"

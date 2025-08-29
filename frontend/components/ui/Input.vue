@@ -1,7 +1,7 @@
 <template>
   <div class="custom-input">
-    <div class="input-header">
-      <label v-if="label" :for="id" class="input-label">
+    <div v-if="label" class="input-header">
+      <label  :for="id" class="input-label">
         {{ label }}
         <span v-if="required" class="required-mark">*</span>
       </label>
@@ -27,6 +27,7 @@
       />
       <textarea
         v-else
+        ref="inputRef"
         class="input-control input-control--textarea"
         :class="{
           'input-control--error': error,
@@ -34,6 +35,7 @@
           'input-control--focused': isFocused
         }"
         :id="id"
+        :disabled="disabled"
         v-model="model"
         :placeholder="placeholder"
         @focus="isFocused = true"
@@ -60,7 +62,7 @@ const props = defineProps<{
 }>()
 
 const model = defineModel<string>()
-const inputRef = ref<HTMLInputElement | null>(null)
+const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null)
 const isFocused = ref(false)
 
 onMounted(() => {
@@ -135,8 +137,20 @@ onMounted(() => {
 }
 
 .input-control--textarea {
-  resize: vertical;
   min-height: 88px;
+  resize: none;
+  font-family: inherit;
+  line-height: 1.5;
+  
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+  }
+  
+  &:hover {
+    border-color: #d1d5db;
+  }
 }
 
 .input-control--error {

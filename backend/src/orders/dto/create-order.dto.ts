@@ -9,7 +9,7 @@ export const CreateOrderSchema = z
   .required();
 
 export class CreateOrderDto {
-  recieverInfo: {
+  clientInfo: {
     fio: string;
     phone: string;
     email: string;

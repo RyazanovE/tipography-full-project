@@ -4,6 +4,7 @@ export const services = [
     img: './images/categories/visiting-cards.png',
     to: '/vse-uslugi/vizitki',
     icon: 'mdiCardAccountDetails',
+    disabled: false,
   },
   // {
   //   title: 'Печать документов А3/А4',
@@ -14,12 +15,14 @@ export const services = [
     title: 'Печать листовок и флаеров',
     img: './images/categories/listovki-i-flaeri.png',
     to: '/vse-uslugi/listovki-i-flaeri',
-    icon: 'mdiFileDocument'
+    icon: 'mdiFileDocument',
+    disabled: false,
   },
   {
     title: 'Печать буклетов',
     img: './images/categories/buklet.png',
-    icon: 'mdiBookOpenVariant'
+    icon: 'mdiBookOpenVariant',
+    disabled: false,
   },
   {
     title: 'Широкоформатная печать',
@@ -97,7 +100,7 @@ export const priceRows = [
   { label: 'A3 цветная', prices: [78, 73, 68, 63, 59, 54] }
 ]
 
-export const deliveries=[
+export const deliveries = [
   {
     type: 'Бесплатная доставка по Москве',
     note: '* при заказе через сайт от 10 000 ₽ или через менеджеров от 20 000 ₽',
@@ -216,11 +219,11 @@ export const options: { [key: string]: Array<{ label: string; value: string, cos
   printType: [
     {
       label: 'Односторонняя',
-      value:'Односторонняя',
+      value: 'Односторонняя',
     },
     {
       label: 'Двусторонняя',
-      value:'Двусторонняя',
+      value: 'Двусторонняя',
     },
   ],
   color: [

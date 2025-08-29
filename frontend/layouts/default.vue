@@ -37,7 +37,7 @@ onMounted(async () => {
 <style scoped lang="scss">
 .background-wrapper {
   background-color: $light_gray_background_color;
-  padding: $normal_gap 0;
+  padding: 40px 0;
 
   .width-container {
     width: $app_width;

@@ -1,6 +1,10 @@
 export default defineNuxtConfig({
   modules: ['@nuxtjs/google-fonts', 'nuxt-mdi', 'nuxt-swiper', '@nuxt/image'],
   css: ["@/assets/styles/main.scss"],
+  typescript: {
+    strict: false,
+    typeCheck: false
+  },
   vite: {
     css: {
       preprocessorOptions: {

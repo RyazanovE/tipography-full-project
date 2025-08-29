@@ -1,19 +1,35 @@
 <template>
-    <h3 class="title">
-        <slot></slot>
-    </h3>
-
+    <div class="subheader">
+        <h3 class="title">
+            <slot></slot>
+        </h3>
+        <p v-if="subtitle" class="subtitle">
+            {{ subtitle }}
+        </p>
+    </div>
 </template>
 
+<script setup lang="ts">
+interface Props {
+  subtitle?: string | Element
+}
+
+defineProps<Props>()
+</script>
+
 <style scoped lang="scss">
+.subheader {
+    text-align: center;
+}
+
 .title {
-  margin-bottom: 32px;
     font-size: 24px;
     font-weight: 700;
     color: #1e293b;
     text-align: center;
     position: relative;
     padding-bottom: 16px;
+    margin-bottom: 0;
 
     &::after {
       content: '';
@@ -28,4 +44,24 @@
     }
 }
 
+.subtitle {
+    color: #6b7280;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 16px auto 0;
+    font-weight: 400;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .title {
+        font-size: 20px;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+        margin: 12px auto 0;
+    }
+}
 </style>

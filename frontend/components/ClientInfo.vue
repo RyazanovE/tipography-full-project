@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useLoginModal } from '~/stores/login-modal'
-import type { AuthMethod, ClientInfo } from '~/types/orders'
+import type { AuthMethod  } from '~/types/orders'
 
 const auth = useAuth()
 const isLoginModalShownState = useLoginModal()
@@ -11,7 +11,6 @@ defineProps<{
 
 const step = defineModel<number>('step', { required: true })
 const selectedAuthMethod = defineModel<AuthMethod>('selectedAuthMethod', { required: true })
-const clientInfo = defineModel<ClientInfo>('clientInfo', { required: true })
 
 const login = () => {
   selectedAuthMethod.value = null

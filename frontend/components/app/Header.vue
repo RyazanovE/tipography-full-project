@@ -122,7 +122,7 @@ const cart = useCart()
             <ButtonIcon
               class="profile-buttons__button"
               icon="mdiProgressCheck"
-              @click="auth.isAuthorized.value ? navigateTo('/my/tekushie-zakazy') :  navigateTo('/order-status')"
+              @click="auth.isAuthorized.value ? navigateTo('/my/tekushie-zakazy') :  navigateTo('/otslezhivaniye-zakaza')"
             >
               Статус заказа
             </ButtonIcon>

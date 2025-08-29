@@ -157,7 +157,6 @@ const removeFiles = (event: Event) => {
     display: flex;
     align-items: center;
     font-size: 16px;
-    font-weight: 600;
     color: #2d3748;
     margin: 0;
   }

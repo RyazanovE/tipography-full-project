@@ -25,7 +25,7 @@ export class OrderService {
   ) {}
 
   async createOrder(dto: CreateOrderDto, guestId?: string, userId?: number) {
-    if (!userId && !dto.recieverInfo.email) {
+    if (!userId && !dto.clientInfo.email) {
       throw new BadRequestException('Email обязателен для гостей');
     }
     const where: FindManyOptions<CartItem>['where'] = {};

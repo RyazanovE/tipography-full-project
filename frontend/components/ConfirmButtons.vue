@@ -1,17 +1,23 @@
 <template>
+  <div>
   <div class="calculation-form__summ">
     <div class="summ">
-      <span class="summ__value">от {{ summ }} руб.</span>
-      <UiTooltip> {{ tooltipText }} </UiTooltip>
+      <!-- <span class="summ__value">от {{ summ }} руб.</span> -->
+      <!-- <UiTooltip> {{ tooltipText }} </UiTooltip> -->
     </div>
-    <ButtonSolid style="color: white" @click="$emit('addToCart')">
+    <ButtonSolid :disabled variant='outline' style='margin-right: 20px'>
+      Быстрый заказ
+    </ButtonSolid>
+    <ButtonSolid :disabled style="color: white" @click="$emit('addToCart')">
       В корзину
     </ButtonSolid>
   </div>
+
+</div>
 </template>
 
 <script setup lang="ts">
-defineProps<{ summ: number; tooltipText: string }>();
+defineProps<{ summ: number; tooltipText: string; disabled?: boolean }>();
 </script>
 
 <style scoped lang="scss">
@@ -32,4 +38,6 @@ defineProps<{ summ: number; tooltipText: string }>();
     }
   }
 }
+
+
 </style>

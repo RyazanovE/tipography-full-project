@@ -61,8 +61,8 @@ breadcrumbs.value = [
     to: '/'
   },
   {
-    title: 'Статус заказа',
-    to: '/order-status'
+    title: 'Отслеживание заказа',
+    to: '/otslezhivaniye-zakaza'
   }
 ]
 

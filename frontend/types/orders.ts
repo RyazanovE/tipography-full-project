@@ -52,6 +52,7 @@ export interface ClientInfo {
   fio: string
   phone: string
   email: string
+  phoneBackup?: string
 }
 
 export interface AddressInfo {
@@ -75,7 +76,7 @@ export interface OrderPayload {
   }
 }
 
-export type ConfirmationStep = 0 | 1 | 2 | 3
+export type ConfirmationStep = 0 | 1 | 2 | 3 | 4
 
 export type AuthMethod = 1 | 2 | null
 

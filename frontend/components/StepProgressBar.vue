@@ -13,7 +13,7 @@
         :key="index" 
         class="progress-step"
         :class="getStepClass(index)"
-        @click="!disabled && handleStepClick(index)"
+        @click="!isStepDisabled(index) && handleStepClick(index)"
       >
         <div class="progress-step__circle">
           <div class="progress-step__number">
@@ -61,7 +61,7 @@ export default {
       default: true
     },
     disabled: {
-      type: Boolean,
+      type: [Boolean, Array],
       default: false
     }
   },
@@ -79,8 +79,17 @@ export default {
         'progress-step--active': index === this.currentStep,
         'progress-step--completed': index < this.currentStep,
         'progress-step--upcoming': index > this.currentStep,
-        'progress-step--disabled': this.disabled
+        'progress-step--disabled': this.isStepDisabled(index)
       };
+    },
+    isStepDisabled(index) {
+      if (typeof this.disabled === 'boolean') {
+        return this.disabled;
+      }
+      if (Array.isArray(this.disabled)) {
+        return this.disabled.includes(index);
+      }
+      return false;
     },
     handleStepClick(index) {
       if (index <= this.currentStep) {

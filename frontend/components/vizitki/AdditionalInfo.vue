@@ -1,9 +1,10 @@
 <template>
   <section class="tabs section">
-    <UiCard class="tabs-card">
+    <div class="tabs-container">
+      <UiCard class="tabs-card">
       <UiSubHeader>Дополнительная информация</UiSubHeader>
 
-      <div class="tabs-nav-container section__content">
+      <div style='margin-top: 40px' class="tabs-nav-container section__content">
         <div class="tabs-nav">
           <button
             v-for="button in tabButtons"
@@ -114,7 +115,8 @@
           </div>
         </div>
       </div>
-    </UiCard>
+      </UiCard>
+    </div>
   </section>
 </template>
 
@@ -135,9 +137,17 @@ const tabButtons = [
 </script>
 
 <style scoped lang="scss">
+.tabs-card {
+}
+
 .tabs {
-  margin-top: 48px;
   margin-bottom: 40px;
+  width: 100%;
+
+  &-container {
+    width: 100%;
+    min-width: 100%;
+  }
 
   &-card {
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
@@ -145,9 +155,11 @@ const tabButtons = [
     overflow: hidden;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
     border: 1px solid #e2e8f0;
+    width: 100%;
   }
 
   .section {
+
     &__header {
       font-size: 28px;
       font-weight: 700;
@@ -252,11 +264,14 @@ const tabButtons = [
 
   .tabs-content {
     padding: 32px;
+    width: 100%;
+    min-width: 100%;
   }
 
   .tab-panel {
     display: none;
     animation: fadeIn 0.5s ease;
+    width: 100%;
 
     &--active {
       display: block;
@@ -264,6 +279,7 @@ const tabButtons = [
   }
 
   .tab-content {
+    width: 100%;
     &__header {
       font-size: 22px;
       font-weight: 600;

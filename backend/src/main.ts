@@ -12,7 +12,7 @@ app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 app.use(cookieParser()); // Обязательно
 app.use(new GuestTokenMiddleware().use);
   app.enableCors({
-    origin: process.env.NODE_ENV === 'production' ? 'http://185.105.111.233' : 'http://localhost:3000',
+    origin: process.env.NODE_ENV === 'production' ? 'http://185.105.111.233:3000' : 'http://localhost:3000',
     credentials: true
   });
   

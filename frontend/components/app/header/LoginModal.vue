@@ -184,7 +184,7 @@ const register = async () => {
     })
     formState.value = 'register-confirmation'
   } catch (error) {
-    notification.notify('Пользователь с указанным email уже существует', 'error')
+    notification.notify(error.message, 'error')
     console.error(error)
   } finally {
     isLoading.value = false

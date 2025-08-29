@@ -34,6 +34,7 @@ roadmap
 
 
 деплой на vps 
+- git clone  https://RyazanovE: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@github.com/RyazanovE/tipography-full-project
 - $ scp -r -P 22 "D:/js/tipography-full-project/" egor@185.105.111.233:
 - открыть putty и подключится к host 185.105.111.233 (egor Shunkazami01-)
 - sudo docker compose up -d --build

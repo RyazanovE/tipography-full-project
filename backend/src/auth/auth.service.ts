@@ -21,10 +21,10 @@ export class AuthService {
   async validateUser(email: string, password: string) {
     const user = await this.userService.findByEmail(email);
 
-    if (!user) throw new UnauthorizedException('User not found');
+    if (!user) throw new UnauthorizedException('Пользователь с таким email не найден');
 
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) throw new UnauthorizedException('Invalid password');
+    if (!isPasswordMatch) throw new UnauthorizedException('Неверный пароль');
 
     return { id: user.id };
   }
@@ -77,7 +77,7 @@ export class AuthService {
     const user = await this.userService.findOne(userId, true);
 
     if (!user?.hashedRefreshToken || !refreshToken) {
-      throw new UnauthorizedException('User Refresh Token not found');
+      throw new UnauthorizedException('Токен обновления не найден');
     }
     const refreshTokenMatches = await argon2.verify(
       user.hashedRefreshToken,
@@ -85,7 +85,7 @@ export class AuthService {
     );
 
     if (!refreshTokenMatches) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException('Неверный токен обновления');
     }
 
     return { id: userId };

@@ -115,7 +115,7 @@ export class UserService {
     const user = await this.userRepo.findOneBy({ email });
 
     if (!user) {
-      throw new NotFoundException('Пользователь не найден');
+      throw new NotFoundException('Пользователь с таким email не найден');
     }
     const { token, expiresAt } = this.generateResetPasswordToken();
 
@@ -261,7 +261,7 @@ export class UserService {
     });
   
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Пользователь не найден');
     }
   
     return user;
